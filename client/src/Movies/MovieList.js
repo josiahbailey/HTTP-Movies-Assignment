@@ -5,7 +5,7 @@ import MovieCard from "./MovieCard";
 function MovieList({ movies }) {
    return (
       <div className="movie-list">
-         {
+         {movies ? <h1>Add Movies</h1> :
             movies.map(movie => (
                <Link key={movie.id} to={`/movies/${movie.id}`}>
                   <MovieCard movie={movie} />

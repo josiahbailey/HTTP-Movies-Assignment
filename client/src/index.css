@@ -59,7 +59,7 @@ body {
 .save-button {
    position: absolute;
    top: 25px;
-   right: 25px;
+   right: 65px;
    border: 1px solid grey;
    padding: 5px 10px;
    background-color: lightseagreen;
@@ -68,10 +68,19 @@ body {
 .update-button {
    position: absolute;
    top: 25px;
-   right: 100px;
+   right: 130px;
    border: 1px solid grey;
    padding: 5px 10px;
    background-color: lightseagreen;
+}
+
+.delete-button {
+   position: absolute;
+   top: 25px;
+   right: 25px;
+   border: 1px solid grey;
+   padding: 5px 10px;
+   background-color: red;
 }
 
 .save-button:hover,
