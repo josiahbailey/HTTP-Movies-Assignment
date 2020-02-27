@@ -3,8 +3,8 @@ import axios from 'axios'
 import { useRouteMatch, useHistory } from 'react-router-dom'
 import MovieCard from './MovieCard'
 
-const MovieForm = ({ addToMoviesList }) => {
-   let id = 0
+const MovieForm = ({ addToMoviesList, toggleEditing, isEditing }) => {
+   const id = 0
    const history = useHistory()
    const match = useRouteMatch()
    const [star, setStar] = useState('')
@@ -12,7 +12,7 @@ const MovieForm = ({ addToMoviesList }) => {
       id: Date.now(),
       title: '',
       director: '',
-      metascore: 89,
+      metascore: 0,
       stars: []
    })
 
@@ -40,10 +40,17 @@ const MovieForm = ({ addToMoviesList }) => {
 
    const addMovieStar = e => {
       e.preventDefault()
+      let arr = []
+      if (movie.stars) {
+         arr = [movie.stars, star]
+      } else {
+         arr = [star]
+      }
       setMovie({
          ...movie,
-         stars: [...movie.stars, star]
+         stars: arr
       })
+      setStar('')
    }
 
    const changeStarName = e => {
@@ -52,14 +59,26 @@ const MovieForm = ({ addToMoviesList }) => {
 
    const handleSubmit = e => {
       e.preventDefault()
-      axios.put(`http://localhost:5000/api/movies/${id}`, movie)
-         .then(res => {
-            console.log(res)
-            addToMoviesList(res.data)
-         })
-         .catch(err => {
-            console.log(err)
-         })
+      if (isEditing === true) {
+         axios.put(`http://localhost:5000/api/movies/${id}`, movie)
+            .then(res => {
+               console.log(res)
+               addToMoviesList(res.data)
+            })
+            .catch(err => {
+               console.log(err)
+            })
+         toggleEditing(false)
+      } else if (isEditing === false) {
+         axios.post(`http://localhost:5000/api/movies`, movie)
+            .then(res => {
+               console.log(res)
+               addToMoviesList(res.data)
+            })
+            .catch(err => {
+               console.log(err)
+            })
+      }
       setMovie({
          id: Date.now(),
          title: '',
@@ -68,7 +87,13 @@ const MovieForm = ({ addToMoviesList }) => {
          stars: []
       })
       history.push('/')
+   }
 
+   const removeStar = starToRemove => {
+      setMovie({
+         ...movie,
+         stars: movie.stars.filter(star => star !== starToRemove)
+      })
    }
 
    return (
@@ -77,14 +102,16 @@ const MovieForm = ({ addToMoviesList }) => {
             <input onChange={handleChange} type='text' name='title' value={movie.title} placeholder='movie title' />
             <input onChange={handleChange} type='text' name='director' value={movie.director} placeholder='director' />
             <input onChange={handleChange} type='number' name='metascore' value={movie.metascore} placeholder='metascore' />
-            <button type='submit'>Update Movie</button>
+            {isEditing ? <button type='submit'>Update Movie</button> :
+               <button type='submit'>Add Movie</button>
+            }
          </form>
          <form onSubmit={addMovieStar}>
             <h3>Add Movie Stars</h3>
             <input onChange={changeStarName} type='text' placeholder='Star name' />
          </form>
          <h2>Preview</h2>
-         <MovieCard movie={movie} />
+         <MovieCard edit={true} removeStar={removeStar} movie={movie} />
       </>
    );
 }

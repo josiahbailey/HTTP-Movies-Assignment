@@ -3,7 +3,7 @@ import axios from 'axios';
 import { useRouteMatch, Link, useHistory } from 'react-router-dom';
 import MovieCard from './MovieCard';
 
-function Movie({ addToSavedList, addToMovieList }) {
+function Movie({ addToSavedList, addToMovieList, toggleEditing }) {
    const [movie, setMovie] = useState(null);
    const match = useRouteMatch();
    const history = useHistory()
@@ -43,8 +43,8 @@ function Movie({ addToSavedList, addToMovieList }) {
    return (
       <div className='save-wrapper'>
          <MovieCard movie={movie} />
-         <Link to={`/update-movie/${movie.id}`}>
-            <div className='update-button'>
+         <Link to={`/update-movies/${movie.id}`}>
+            <div onClick={() => toggleEditing(true)} className='update-button'>
                Update
             </div>
          </Link>

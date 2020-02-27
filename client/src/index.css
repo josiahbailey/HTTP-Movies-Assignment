@@ -92,6 +92,16 @@ body {
 .home-button {
    padding: 5px 10px;
    background-color: lightskyblue;
+   width: 15%;
+   text-align: center;
+   margin: 2%;
+}
+
+.links {
+   display: flex;
+   margin: 0 auto;
+   width: 70%;
+   justify-content: center;
 }
 
 .movie-warning {

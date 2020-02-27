@@ -5,12 +5,15 @@ import MovieCard from "./MovieCard";
 function MovieList({ movies }) {
    return (
       <div className="movie-list">
-         {movies ? <h1>Add Movies</h1> :
+         {movies.length > 0 &&
             movies.map(movie => (
                <Link key={movie.id} to={`/movies/${movie.id}`}>
                   <MovieCard movie={movie} />
                </Link>
             ))
+         }
+         {movies.length === 0 &&
+            <h1>Add More Movies</h1>
          }
       </div>
    );

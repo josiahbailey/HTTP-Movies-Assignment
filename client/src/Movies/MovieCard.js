@@ -1,7 +1,7 @@
 import React from 'react';
 
-const MovieCard = props => {
-   const { title, director, metascore, stars } = props.movie;
+const MovieCard = ({ movie, edit, removeStar }) => {
+   const { title, director, metascore, stars } = movie;
    return (
       <div className="movie-card">
          <h2>{title}</h2>
@@ -13,11 +13,16 @@ const MovieCard = props => {
          </div>
          <h3>Actors</h3>
 
-         {stars.map(star => (
-            <div key={star} className="movie-star">
-               {star}
-            </div>
-         ))}
+         {stars !== undefined &&
+            stars.map(star => (
+               <div key={star} className="movie-star">
+                  {star}
+                  {edit ? <button onClick={() => removeStar(star)} className='star-button'>X</button> : ''}
+               </div>
+            ))}
+         {stars === undefined &&
+            <p>Add New Stars!</p>
+         }
       </div>
    );
 };

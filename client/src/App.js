@@ -9,6 +9,12 @@ import axios from 'axios';
 const App = () => {
    const [savedList, setSavedList] = useState([]);
    const [movieList, setMovieList] = useState([]);
+   const [isEditing, setIsEditing] = useState(false)
+
+   const toggleEditing = bool => {
+      console.log(isEditing)
+      setIsEditing(bool)
+   }
 
    const getMovieList = () => {
       axios
@@ -27,22 +33,26 @@ const App = () => {
 
    useEffect(() => {
       getMovieList();
-   }, []);
+   }, [movieList]);
 
    return (
       <>
-         <SavedList list={savedList} />
+         <SavedList toggleEditing={toggleEditing} list={savedList} />
 
          <Route exact path="/">
             <MovieList movies={movieList} />
          </Route>
 
          <Route exact path="/movies/:id">
-            <Movie addToMovieList={addToMovieList} addToSavedList={addToSavedList} />
+            <Movie toggleEditing={toggleEditing} addToMovieList={addToMovieList} addToSavedList={addToSavedList} />
          </Route>
 
-         <Route exact path="/update-movie/:id">
-            <MovieForm addToMovieList={addToMovieList} />
+         <Route exact path="/add-movies">
+            <MovieForm isEditing={isEditing} toggleEditing={toggleEditing} addToMovieList={addToMovieList} />
+         </Route>
+
+         <Route exact path="/update-movies/:id">
+            <MovieForm isEditing={isEditing} toggleEditing={toggleEditing} addToMovieList={addToMovieList} />
          </Route>
       </>
    );
